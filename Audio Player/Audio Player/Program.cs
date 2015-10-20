@@ -21,10 +21,10 @@ using System.Threading;
  * Fix bugs.
  * Make it so that 'playing()' is not being refreshed every second.
  * Timeline.
- * File browser, so you dont have to type in the file path.
- * Auto refil path. If you put in half of a name, you should be able to press TAB and it will complete the other half.
+ * File browser, so you don't have to type in the file path.
+ * Auto refill path. If you put in half of a name, you should be able to press TAB and it will complete the other half.
  * Adding support for other playlist extensions.
- * When the song finishes, if it's in a playlist the next song should play, if not then it should return to the signle song selection menu. Currently when a song finishes, it just stays in the 'playing()' function.
+ * When the song finishes, if it's in a playlist the next song should play, if not then it should return to the single song selection menu. Currently when a song finishes, it just stays in the 'playing()' function.
  *
  * KNOWN BUGS AND ERRORS
  * 
@@ -220,7 +220,7 @@ namespace SAP
                         {
 
                             printlogo();
-                            //Console.WriteLine("Playlist: {0}", Program.playPList.input);                                         //   <- This part doesnt work, needs to be fixed
+                            //Console.WriteLine("Playlist: {0}", Program.playPList.input);                                         //   <- This part doesn't work, needs to be fixed
                             Console.WriteLine("Now playing: {0}", Path.GetFileNameWithoutExtension(source));
                             Console.WriteLine("Volume: {0}", wplayer.settings.volume);
 
@@ -359,7 +359,7 @@ namespace SAP
             Console.WriteLine("There will be a cursor added to this part, for now use text.\n");
             Console.WriteLine("Select a playlist: ");
             
-            //write all text documents inside playlist directory        <-       (Theres a problem here if the .txt does not contain music path sources or is empty. There should be an exclusive file type for playlist files (eg. '.sapplist'))
+            //write all text documents inside playlist directory        <-       (There's a problem here if the .txt does not contain music path sources or is empty. There should be an exclusive file type for playlist files (eg. '.sapplist'))
             string[] filePaths = Directory.GetFiles(@"playlists");
             for (int i = 0; i < filePaths.Length; ++i)
             {
