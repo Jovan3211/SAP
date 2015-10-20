@@ -16,3 +16,6 @@ D:\Programming\Audio Player\Audio Player\obj\x86\Debug\Audio Player.pdb
 D:\Programming\Audio Player\Audio Player\bin\Debug\Audio Player.exe
 D:\Programming\Audio Player\Audio Player\bin\Debug\Audio Player.pdb
 D:\Programming\Audio Player\Audio Player\obj\x86\Debug\Audio Player.csprojResolveAssemblyReference.cache
+D:\Programming\SAP\Audio Player\Audio Player\obj\x86\Debug\Audio Player.csproj.ResolveComReference.cache
+D:\Programming\SAP\Audio Player\Audio Player\obj\x86\Debug\Audio Player.exe
+D:\Programming\SAP\Audio Player\Audio Player\obj\x86\Debug\Audio Player.pdb
