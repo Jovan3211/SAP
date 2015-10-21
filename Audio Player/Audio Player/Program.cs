@@ -313,7 +313,7 @@ namespace SAP
             //creation of the text document where the song sources are stored
             string playpath = @"playlists\" + playlistName + ".txt";  
 
-            using (StreamWriter writer = new StreamWriter(playpath))
+            using (StreamWriter writer = new StreamWriter(playpath, true))
             {
                 bool loop = true;
                 while (loop == true) //inputing sources into the playlist text file
@@ -378,13 +378,13 @@ namespace SAP
             {
                 return;
             }
-            else if(!input.Contains(".txt"))
+        /*    else if(!input.Contains(".txt"))
             {
                 Console.WriteLine("\nThe playlist name is either incorrect or the type is not supported.\nPress any key to return to main menu.");
                 Console.ReadKey();
                 return;
             }
-
+*/
             string playpath = @"playlists\" + input + ".txt";
 
             int loop = 1;
