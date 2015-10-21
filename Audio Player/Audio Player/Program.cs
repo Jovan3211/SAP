@@ -2,19 +2,21 @@
 using WMPLib;
 using System.IO;
 using System.Threading;
+using System.Collections;
 
 /*
  * CHANGE LOG
  *
- * 1.0.0  - Completed the foundation.
- * 1.1.0  - Added timer, no refresh.
- * 1.2.0  - Added improved timer; code fixes.
- * 1.2.1  - Addition of functions, rearranging code.
- * 1.2.2  - Added creating playlists. Added creating a playlist folder.
- * 1.2.3  - Rewriting some code, added going back to the main menu from the 'playsingle(int)' function. Fixed adding songs for the playlist.
- * 1.2.4  - Rearranging playlist code, 'playsingle(int, bool)' has a new argument; some code added for 'playPList();'.
- * 1.2.5b - Some fixing around the playlist.
- * 1.2.5  - Code fixes.
+ * 1.0.0    - Completed the foundation.
+ * 1.1.0    - Added timer, no refresh.
+ * 1.2.0    - Added improved timer; code fixes.
+ * 1.2.1    - Addition of functions, rearranging code.
+ * 1.2.2    - Added creating playlists. Added creating a playlist folder.
+ * 1.2.3    - Rewriting some code, added going back to the main menu from the 'playsingle(int)' function. Fixed adding songs for the playlist.
+ * 1.2.4    - Rearranging playlist code, 'playsingle(int, bool)' has a new argument; some code added for 'playPList();'.
+ * 1.2.5b   - Some fixing around the playlist.
+ * 1.2.5    - Code fixes.
+ * 1.3.0    - Replaced streamreader with hashtable. The playlist should work now.
  *
  * PLANNED
  *
@@ -28,8 +30,6 @@ using System.Threading;
  *
  * KNOWN BUGS AND ERRORS
  * 
- * Playlist: The program crashes if it's an empty .txt file.
- * Playlist: Buggy as fuck, don't know why.
  *
 */
 
@@ -40,7 +40,7 @@ namespace SAP
     {
         static void printlogo()  //printing of the program logo text
         {
-            string version = "1.2.5";
+            string version = "1.3.0";
 
             Console.Clear();
             Console.WriteLine("{0}", version);
@@ -359,7 +359,7 @@ namespace SAP
             Console.WriteLine("There will be a cursor added to this part, for now use text.\n");
             Console.WriteLine("Select a playlist: ");
             
-            //write all text documents inside playlist directory        <-       (There's a problem here if the .txt does not contain music path sources or is empty. There should be an exclusive file type for playlist files (eg. '.sapplist'))
+            //display all text documents inside playlist directory        <-       (There's a problem here if the .txt does not contain music path sources or is empty. There should be an exclusive file type for playlist files (eg. '.sapplist'))
             string[] filePaths = Directory.GetFiles(@"playlists");
             for (int i = 0; i < filePaths.Length; ++i)
             {
@@ -384,22 +384,49 @@ namespace SAP
                 Console.ReadKey();
                 return;
             }
-*/
+        */
             string playpath = @"playlists\" + input + ".txt";
 
-            int loop = 1;
-            string source;
-            using (StreamReader reader = new StreamReader(playpath))  //play song from playlist
+            //read all paths from playlist.txt and input them into a hashtable
+            Hashtable hashtable = new Hashtable();
+            int j = 1;
+            if (File.Exists(playpath))
             {
-                while ((loop == 1) || (reader.ReadLine() != null)) {
-                    source = reader.ReadLine();
-                    loop = playing(source, true);
-
-                    if (reader.ReadLine() == null){
-                        break;
+                using (StreamReader reader = new StreamReader(playpath))
+                {
+                    while (true)
+                    {
+                        hashtable[j] = reader.ReadLine();
+                        if (hashtable[j] == null)
+                        {
+                            break;
+                        }
+                        j += 1;
                     }
                 }
             }
+            else
+            {
+                printlogo();
+                Console.WriteLine("The selected playlist does not exist or is an incorrect format.\nPress any key to return to main menu.");
+                Console.ReadKey();
+                return;
+            }
+
+            int loop = 1;
+            string source;
+
+            //play song from playlist/hashtable
+            for (int i = 1; i < j; i++) {
+                source = hashtable[i].ToString();
+                loop = playing(source, true);
+
+                if(loop == 0)  //break if user selected 'return to main menu'
+                {
+                    break;
+                }
+            }
+
             printlogo();
             Console.WriteLine("The playlist is over. Press any key to return to main menu.");
             Console.ReadKey();
