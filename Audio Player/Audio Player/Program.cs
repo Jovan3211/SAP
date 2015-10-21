@@ -17,6 +17,8 @@ using System.Collections;
  * 1.2.5b   - Some fixing around the playlist.
  * 1.2.5    - Code fixes.
  * 1.3.0    - Replaced streamreader with hashtable. The playlist should work now.
+ * 1.3.1    - Cursor optimisation. Instead of the whole screen printing out again when you press an arrow in cursor menu, now the cursor is set using coordinates.
+ *            Added some (non functional) playlist selection menu cursor code. Currently commented at line 365.
  *
  * PLANNED
  *
@@ -30,6 +32,7 @@ using System.Collections;
  *
  * KNOWN BUGS AND ERRORS
  * 
+ * The new selection code is buggy. From the main menu, when going into playlist selection and returning to main menu the cursor goes way down.
  *
 */
 
@@ -40,7 +43,7 @@ namespace SAP
     {
         static void printlogo()  //printing of the program logo text
         {
-            string version = "1.3.0";
+            string version = "1.3.1";
 
             Console.Clear();
             Console.WriteLine("{0}", version);
@@ -81,6 +84,7 @@ namespace SAP
             } 
         }
 
+        //coordinates
         protected static int origRow;
         protected static int origCol;
         protected static void WriteAt(string s, int x, int y)  //function for printing text on specified coordinates
@@ -99,80 +103,58 @@ namespace SAP
 
         static int homescreen()  //main menu / selection screen
         {
-            string cursor1 = " ", cursor2 = " ", cursor3 = " ";
             int selection = 1;
+            printlogo();
 
-            //selection screen loop
-            bool loop = true;
-            while (loop)
+            //selection screen
+            Console.WriteLine("     Play single song");
+            Console.WriteLine("     Create a new playlist");
+            Console.WriteLine("     Select an existing playlist");
+
+            //hide cursor, setting variables, read key input and do selection
+            Console.CursorVisible = false;
+            int x = 1, y = 13;
+            bool cursorLoop = true;
+            while (cursorLoop == true)  //loop for selection
             {
-                printlogo();
+                WriteAt("  >", x, y);  //draw cursor
 
-                if (selection == 1)
-                {
-                    cursor1 = ">";
-                    cursor2 = " ";
-                    cursor3 = " ";
-                }
-                else if (selection == 2)
-                {
-                    cursor1 = " ";
-                    cursor2 = ">";
-                    cursor3 = " ";
-                }
-                else if (selection == 3)
-                {
-                    cursor1 = " ";
-                    cursor2 = " ";
-                    cursor3 = ">";
-                }
-
-                Console.WriteLine("  {0} Play single song", cursor1);
-                Console.WriteLine("  {0} Create a new playlist", cursor2);
-                Console.WriteLine("  {0} Select an existing playlist", cursor3);
-
-                //read key input and do selection
                 System.ConsoleKey input = Console.ReadKey().Key;
-
                 if (input == System.ConsoleKey.UpArrow)
                 {
-                    if (selection == 1)
+                    WriteAt("   ", x, y);
+                    if (y == 13)
                     {
+                        y += 2;
                         selection = 3;
                     }
-                    else if (selection == 2)
+                    else if (y <= 15)
                     {
-                        selection = 1;
-                    }
-                    else if (selection == 3)
-                    {
-                        selection = 2;
+                        y -= 1;
+                        selection -= 1;
                     }
                 }
-
-                if (input == System.ConsoleKey.DownArrow)
+                else if (input == System.ConsoleKey.DownArrow)
                 {
-                    if (selection == 1)
+                    WriteAt("   ", x, y);
+                    if (y == 15)
                     {
-                        selection = 2;
+                        y -= 2;
+                        selection = -3;
                     }
-                    else if (selection == 2)
+                    else if (y >= 13)
                     {
-                        selection = 3;
-                    }
-                    else if (selection == 3)
-                    {
-                        selection = 1;
+                        y += 1;
+                        selection += 1;
                     }
                 }
-
-                if (input == System.ConsoleKey.Enter)
+                else if (input == System.ConsoleKey.Enter)
                 {
-                    loop = false;
+                    cursorLoop = false;
                 }
-
             }
 
+            Console.CursorVisible = true;
             return selection;
         }
 
@@ -356,10 +338,10 @@ namespace SAP
             origCol = Console.CursorLeft;
 
             printlogo();
-            Console.WriteLine("There will be a cursor added to this part, for now use text.\n");
             Console.WriteLine("Select a playlist: ");
-            
+
             //display all text documents inside playlist directory        <-       (There's a problem here if the .txt does not contain music path sources or is empty. There should be an exclusive file type for playlist files (eg. '.sapplist'))
+            int numberOfFiles = 0;
             string[] filePaths = Directory.GetFiles(@"playlists");
             for (int i = 0; i < filePaths.Length; ++i)
             {
@@ -368,6 +350,7 @@ namespace SAP
                 {
                     Console.WriteLine("   {0}\t\tPlay\tEdit", System.IO.Path.GetFileNameWithoutExtension(path));
                 }
+                numberOfFiles = i;
             }
             Console.WriteLine("\n   Back");
 
@@ -378,13 +361,53 @@ namespace SAP
             {
                 return;
             }
-        /*    else if(!input.Contains(".txt"))
+
+            /*//hide cursor, setting variables, read key input and do selection
+            Console.CursorVisible = false;
+            int selection = 1;
+            int x = 1, y = 1;
+            WriteAt("  >", x, y);
+            bool cursorLoop = true;
+            while (cursorLoop == true)  //loop for selection
             {
-                Console.WriteLine("\nThe playlist name is either incorrect or the type is not supported.\nPress any key to return to main menu.");
-                Console.ReadKey();
-                return;
+                WriteAt("  >", x, y);  //draw cursor
+
+                System.ConsoleKey keyInput = Console.ReadKey().Key;
+                if (keyInput == System.ConsoleKey.UpArrow)
+                {
+                    WriteAt("   ", x, y);
+                    if (y == 1)
+                    {
+                        y = numberOfFiles;
+                        selection = numberOfFiles;
+                    }
+                    else if (y <= numberOfFiles)
+                    {
+                        y -= 1;
+                        selection -= 1;
+                    }
+                }
+                else if (keyInput == System.ConsoleKey.DownArrow)
+                {
+                    WriteAt("   ", x, y);
+                    if (y == numberOfFiles)
+                    {
+                        y = 1;
+                        selection = 1;
+                    }
+                    else if (y >= 13)
+                    {
+                        y += 1;
+                        selection += 1;
+                    }
+                }
+                else if (keyInput == System.ConsoleKey.Enter)
+                {
+                    cursorLoop = false;
+                }
             }
-        */
+            Console.CursorVisible = true;*/
+
             string playpath = @"playlists\" + input + ".txt";
 
             //read all paths from playlist.txt and input them into a hashtable
@@ -430,27 +453,6 @@ namespace SAP
             printlogo();
             Console.WriteLine("The playlist is over. Press any key to return to main menu.");
             Console.ReadKey();
-
-            /*             ˅ ˅ ˅       THE CURSOR CODE                                                                                         <- This should be added instead of text input
-            //hide cursor, setting variables
-            Console.CursorVisible = false;
-            int x = 1, y = -2;
-            bool loop = true;
-            while (loop == true)  //loop for selection
-            {
-                WriteAt(">", x, y);  //draw cursor
-
-                System.ConsoleKey input = Console.ReadKey().Key;
-                if (input == System.ConsoleKey.UpArrow)
-                {
-
-                }
-                else if (input == System.ConsoleKey.DownArrow)
-                {
-
-                }
-            }*/
-
         }
 
         static void Main(string[] args)
