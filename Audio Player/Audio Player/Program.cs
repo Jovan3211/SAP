@@ -27,6 +27,7 @@ using System.Collections;
  * PLANNED
  *
  * Fix bugs.
+ * In playlist selection add a remove playlist option.
  * Make it so that 'playing()' is not being refreshed every second.
  * Timeline.
  * File browser, so you don't have to type in the file path.
@@ -36,6 +37,7 @@ using System.Collections;
  *
  * KNOWN BUGS AND ERRORS
  * 
+ * If a filepath is incorrect inside a playlist, it will continue reading paths (correct or not) untill it finishes the playlist. There should be an exit/back function if that happens.
  *
 */
 
@@ -372,7 +374,7 @@ namespace SAP
                 string path = filePaths[i];
                 if (path.Contains(".txt"))
                 {
-                    Console.WriteLine("     {0}\t\tPlay\tEdit", System.IO.Path.GetFileNameWithoutExtension(path));
+                    Console.WriteLine("     {0}\t\tPlay\tRemove\tEdit", System.IO.Path.GetFileNameWithoutExtension(path));
                 }
                 numberOfFiles = i;
             }
