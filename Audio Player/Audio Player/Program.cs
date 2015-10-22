@@ -22,6 +22,7 @@ using System.Collections;
  * 1.3.1-1  - You can now drag and drop songs. Cursor fix from select play list to main menu.
  * 1.3.1-2  - Select playlist cursor code edits.
  * 1.3.1-3  - Drag and drop fix.
+ * 1.3.1-4  - Added exit from main menu.
  *
  * PLANNED
  *
@@ -45,7 +46,7 @@ namespace SAP
     {
         static void printlogo()  //printing of the program logo text
         {
-            string version = "1.3.1-3";
+            string version = "1.3.1-4";
 
             Console.Clear();
             Console.WriteLine("{0}", version);
@@ -112,6 +113,8 @@ namespace SAP
             Console.WriteLine("     Play single song");
             Console.WriteLine("     Create a new playlist");
             Console.WriteLine("     Select an existing playlist");
+            Console.WriteLine("");
+            Console.WriteLine("     Exit");
 
             //hide cursor, setting variables, read key input and do selection
             Console.CursorVisible = false;
@@ -127,7 +130,12 @@ namespace SAP
                     WriteAt("   ", x, y);
                     if (y == 13)
                     {
-                        y += 2;
+                        y += 4;
+                        selection = 4;
+                    }
+                    else if (y == 17)
+                    {
+                        y -= 2;
                         selection = 3;
                     }
                     else if (y <= 15)
@@ -141,8 +149,13 @@ namespace SAP
                     WriteAt("   ", x, y);
                     if (y == 15)
                     {
-                        y -= 2;
-                        selection = -3;
+                        y += 2;
+                        selection = 4;
+                    }
+                    else if (y == 17)
+                    {
+                        y = 13;
+                        selection = 1;
                     }
                     else if (y >= 13)
                     {
@@ -491,6 +504,10 @@ namespace SAP
                 else if (input == 3)
                 {
                     playPList();
+                }
+                else if (input == 4)
+                {
+                    return;
                 }
             }
         }
