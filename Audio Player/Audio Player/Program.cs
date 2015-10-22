@@ -23,6 +23,7 @@ using System.Collections;
  * 1.3.1-2  - Select playlist cursor code edits.
  * 1.3.1-3  - Drag and drop fix.
  * 1.3.1-4  - Added exit from main menu.
+ * 1.3.1-5  - Minor changes.
  *
  * PLANNED
  *
@@ -48,7 +49,7 @@ namespace SAP
     {
         static void printlogo()  //printing of the program logo text
         {
-            string version = "1.3.1-4";
+            string version = "1.3.1-5";
 
             Console.Clear();
             Console.WriteLine("{0}", version);
@@ -276,7 +277,7 @@ namespace SAP
             {
                 //message if the file path is wrong or wrong format
                 Console.WriteLine("\nThe location is either incorrect or the file type is not supported.");
-                Console.ReadLine();
+                Console.ReadKey();
             }
             return 1;
         }
@@ -349,7 +350,7 @@ namespace SAP
                     else
                     {
                         Console.WriteLine("\nThe location is either incorrect or the file type is not supported.");
-                        Console.ReadLine();
+                        Console.ReadKey();
                         Console.WriteLine("");
                     }
                 }
@@ -405,12 +406,17 @@ namespace SAP
                 if (keyInput == System.ConsoleKey.UpArrow)
                 {
                     WriteAt("   ", x, y);
-                    if (selection == 1)
+                    if (y == 14)
                     {
-                        y = numberOfFiles-1;
-                        selection = numberOfFiles-1;
+                        y = numberOfFiles + 14;
+                        selection = numberOfFiles;
                     }
-                    else if (selection < numberOfFiles)
+                    else if (y == (numberOfFiles + 18))
+                    {
+                        y -= 2;
+                        selection = 3;
+                    }
+                    else if (y <= numberOfFiles)
                     {
                         y -= 1;
                         selection -= 1;
@@ -419,12 +425,17 @@ namespace SAP
                 else if (keyInput == System.ConsoleKey.DownArrow)
                 {
                     WriteAt("   ", x, y);
-                    if (selection == numberOfFiles)
+                    if (y == 15)
                     {
-                        y = 1;
+                        y += 2;
+                        selection = 4;
+                    }
+                    else if (y == 17)
+                    {
+                        y = 13;
                         selection = 1;
                     }
-                    else if (selection > 4)
+                    else if (y >= 13)
                     {
                         y += 1;
                         selection += 1;
