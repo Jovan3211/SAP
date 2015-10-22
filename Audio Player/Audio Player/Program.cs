@@ -20,6 +20,7 @@ using System.Collections;
  * 1.3.1    - Cursor optimisation. Instead of the whole screen printing out again when you press an arrow in cursor menu, now the cursor is set using coordinates.
  *            Added some (non functional) playlist selection menu cursor code. Currently commented at line 365.
  * 1.3.1-1  - You can now drag and drop songs. Cursor fix from select play list to main menu.
+ * 1.3.1-2  - Select playlist cursor code edits.
  *
  * PLANNED
  *
@@ -350,40 +351,43 @@ namespace SAP
                 string path = filePaths[i];
                 if (path.Contains(".txt"))
                 {
-                    Console.WriteLine("   {0}\t\tPlay\tEdit", System.IO.Path.GetFileNameWithoutExtension(path));
+                    Console.WriteLine("     {0}\t\tPlay\tEdit", System.IO.Path.GetFileNameWithoutExtension(path));
                 }
                 numberOfFiles = i;
             }
-            Console.WriteLine("\n   Back");
+            Console.WriteLine("\n     Back");
 
-            Console.Write("\nType in the playlist name: ");
+            /*Console.Write("\nType in the playlist name: ");
             string input = Console.ReadLine();
 
             if (input == "back")
             {
                 return;
-            }
+            }*/
 
-            /*//hide cursor, setting variables, read key input and do selection
+            //hide cursor, setting variables, read key input and do selection
             Console.CursorVisible = false;
             int selection = 1;
-            int x = 1, y = 1;
+            int x = 1, y = 14;
             WriteAt("  >", x, y);
             bool cursorLoop = true;
             while (cursorLoop == true)  //loop for selection
             {
                 WriteAt("  >", x, y);  //draw cursor
+                Console.Write("|SEL: {0}|", selection);
+                Console.Write("|Y  : {0}|", y);
+                Console.Write("|NUM: {0}|", numberOfFiles);
 
                 System.ConsoleKey keyInput = Console.ReadKey().Key;
                 if (keyInput == System.ConsoleKey.UpArrow)
                 {
                     WriteAt("   ", x, y);
-                    if (y == 1)
+                    if (selection == 1)
                     {
-                        y = numberOfFiles;
-                        selection = numberOfFiles;
+                        y = numberOfFiles-1;
+                        selection = numberOfFiles-1;
                     }
-                    else if (y <= numberOfFiles)
+                    else if (selection < numberOfFiles)
                     {
                         y -= 1;
                         selection -= 1;
@@ -392,12 +396,12 @@ namespace SAP
                 else if (keyInput == System.ConsoleKey.DownArrow)
                 {
                     WriteAt("   ", x, y);
-                    if (y == numberOfFiles)
+                    if (selection == numberOfFiles)
                     {
                         y = 1;
                         selection = 1;
                     }
-                    else if (y >= 13)
+                    else if (selection > 4)
                     {
                         y += 1;
                         selection += 1;
@@ -408,8 +412,9 @@ namespace SAP
                     cursorLoop = false;
                 }
             }
-            Console.CursorVisible = true;*/
+            Console.CursorVisible = true;
 
+            string input = "asd";
             string playpath = @"playlists\" + input + ".txt";
 
             //read all paths from playlist.txt and input them into a hashtable
