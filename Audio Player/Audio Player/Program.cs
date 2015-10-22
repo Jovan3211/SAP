@@ -19,6 +19,7 @@ using System.Collections;
  * 1.3.0    - Replaced streamreader with hashtable. The playlist should work now.
  * 1.3.1    - Cursor optimisation. Instead of the whole screen printing out again when you press an arrow in cursor menu, now the cursor is set using coordinates.
  *            Added some (non functional) playlist selection menu cursor code. Currently commented at line 365.
+ * 1.3.1-1  - You can now drag and drop songs. Cursor fix from select play list to main menu.
  *
  * PLANNED
  *
@@ -32,7 +33,6 @@ using System.Collections;
  *
  * KNOWN BUGS AND ERRORS
  * 
- * The new selection code is buggy. From the main menu, when going into playlist selection and returning to main menu the cursor goes way down.
  *
 */
 
@@ -43,7 +43,7 @@ namespace SAP
     {
         static void printlogo()  //printing of the program logo text
         {
-            string version = "1.3.1";
+            string version = "1.3.1-1";
 
             Console.Clear();
             Console.WriteLine("{0}", version);
@@ -161,6 +161,11 @@ namespace SAP
         static int playing(string source, bool playlistMode)
         {
             //music player - check if .mp3 or .wav file; error if not, play song if otherwise 
+            if (source.Contains("\""))
+            {
+                source = source.Replace("\"", "");
+            }
+
             if ((source.Contains(".mp3") || source.Contains(".wav")) && File.Exists(source))
             {
                 WMPLib.WindowsMediaPlayer wplayer = new WMPLib.WindowsMediaPlayer();
@@ -334,9 +339,6 @@ namespace SAP
 
         static void playPList()  //playlist selection
         {
-            origRow = Console.CursorTop;
-            origCol = Console.CursorLeft;
-
             printlogo();
             Console.WriteLine("Select a playlist: ");
 
