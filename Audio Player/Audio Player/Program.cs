@@ -21,6 +21,7 @@ using System.Collections;
  *            Added some (non functional) playlist selection menu cursor code. Currently commented at line 365.
  * 1.3.1-1  - You can now drag and drop songs. Cursor fix from select play list to main menu.
  * 1.3.1-2  - Select playlist cursor code edits.
+ * 1.3.1-3  - Drag and drop fix.
  *
  * PLANNED
  *
@@ -44,7 +45,7 @@ namespace SAP
     {
         static void printlogo()  //printing of the program logo text
         {
-            string version = "1.3.1-1";
+            string version = "1.3.1-3";
 
             Console.Clear();
             Console.WriteLine("{0}", version);
@@ -161,12 +162,13 @@ namespace SAP
 
         static int playing(string source, bool playlistMode)
         {
-            //music player - check if .mp3 or .wav file; error if not, play song if otherwise 
+            //enables drag and drop
             if (source.Contains("\""))
             {
                 source = source.Replace("\"", "");
             }
 
+            //music player - check if .mp3 or .wav file; error if not, play song if otherwise
             if ((source.Contains(".mp3") || source.Contains(".wav")) && File.Exists(source))
             {
                 WMPLib.WindowsMediaPlayer wplayer = new WMPLib.WindowsMediaPlayer();
@@ -271,7 +273,7 @@ namespace SAP
             {
                 printlogo();
                 Console.WriteLine("Write in 'back' to return.");
-                Console.WriteLine("Write in the location of an audio file (C:\\user\\music\\jam.mp3):");
+                Console.WriteLine("Write in the path of an audio file (C:\\user\\music\\jam.mp3) or drag and drop:");
                 Console.Write("> ");
                 string source = Console.ReadLine();
 
@@ -307,9 +309,15 @@ namespace SAP
                 while (loop == true) //inputing sources into the playlist text file
                 {
                     Console.WriteLine("Type in 'done' to finish.");
-                    Console.WriteLine("Write in the location of an audio file (C:\\user\\music\\jam.mp3):");
+                    Console.WriteLine("Write in the path of an audio file (C:\\user\\music\\jam.mp3) or drag and drop:");
                     Console.Write("> ");
                     string source = Console.ReadLine();
+
+                    //enables drag and drop
+                    if (source.Contains("\""))
+                    {
+                        source = source.Replace("\"", "");
+                    }
 
                     //check if good path and/or format
                     if ((source.Contains(".mp3") || source.Contains(".wav")) && File.Exists(source))
@@ -357,15 +365,15 @@ namespace SAP
             }
             Console.WriteLine("\n     Back");
 
-            /*Console.Write("\nType in the playlist name: ");
+            Console.Write("\nType in the playlist name: ");
             string input = Console.ReadLine();
 
             if (input == "back")
             {
                 return;
-            }*/
+            }
 
-            //hide cursor, setting variables, read key input and do selection
+            /*//hide cursor, setting variables, read key input and do selection                     <-Cursor
             Console.CursorVisible = false;
             int selection = 1;
             int x = 1, y = 14;
@@ -412,9 +420,9 @@ namespace SAP
                     cursorLoop = false;
                 }
             }
-            Console.CursorVisible = true;
+            Console.CursorVisible = true;*/
 
-            string input = "asd";
+            //string input = "asd";
             string playpath = @"playlists\" + input + ".txt";
 
             //read all paths from playlist.txt and input them into a hashtable
