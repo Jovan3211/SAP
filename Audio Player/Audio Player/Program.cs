@@ -24,6 +24,7 @@ using System.Collections;
  * 1.3.1-3  - Drag and drop fix.
  * 1.3.1-4  - Added exit from main menu.
  * 1.3.1-5  - Minor changes.
+ * 1.3.2    - Authentication and product key.
  *
  * PLANNED
  *
@@ -49,7 +50,7 @@ namespace SAP
     {
         static void printlogo()  //printing of the program logo text
         {
-            string version = "1.3.1-5";
+            string version = "1.3.2";
 
             Console.Clear();
             Console.WriteLine("{0}", version);
@@ -498,6 +499,37 @@ namespace SAP
 
         static void Main(string[] args)
         {
+            string authpath = @"playlists\reg.g";
+
+            bool auth = false;
+            while (auth == false) { 
+                if (File.Exists(authpath) == false)
+                {
+                    printlogo();
+                    Console.Write("Enter registration key: ");
+                    string key = Console.ReadLine();
+
+                    if (key == "1234")
+                    {
+                        File.Create(@"playlists\reg.g");
+                        auth = true;
+
+                        Console.WriteLine("\nThe product has been activated.");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nThe key you entered is invalid.");
+                        Console.ReadKey();
+                        return;
+                    }
+                }
+                else
+                {
+                    auth = true;
+                }
+            }
+
             firstSetup();
 
             bool loop = true;
