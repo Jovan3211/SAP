@@ -3,6 +3,7 @@ using WMPLib;
 using System.IO;
 using System.Threading;
 using System.Collections;
+using Microsoft.Win32;
 
 /*
  * CHANGE LOG
@@ -25,6 +26,7 @@ using System.Collections;
  * 1.3.1-4  - Added exit from main menu.
  * 1.3.1-5  - Minor changes.
  * 1.3.2    - Authentication and product key.
+ * 1.3.2r1  - Project settings edited.
  *
  * PLANNED
  *
@@ -50,7 +52,7 @@ namespace SAP
     {
         static void printlogo()  //printing of the program logo text
         {
-            string version = "1.3.2";
+            string version = "1.3.2r1";
 
             Console.Clear();
             Console.WriteLine("{0}", version);
@@ -499,6 +501,7 @@ namespace SAP
 
         static void Main(string[] args)
         {
+            /*//PROGRAM LOCK
             string authpath = @"playlists\reg.g";
 
             bool auth = false;
@@ -528,15 +531,23 @@ namespace SAP
                 {
                     auth = true;
                 }
-            }
+            }*/
 
+            //SETUP
             firstSetup();
 
+            //PROGRAM
             bool loop = true;
             while (loop == true)
             {
                 int input;
                 input = homescreen();
+
+                //check if opened by file
+                if (args.Length != 0)
+                {
+                    playing(args.ToString(), false);
+                }
 
                 if (input == 1)
                 {
