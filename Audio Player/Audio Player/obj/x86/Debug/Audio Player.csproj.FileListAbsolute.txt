@@ -28,3 +28,8 @@ C:\Users\Nada\Desktop\github\jova\SAP\Audio Player\Audio Player\obj\x86\Debug\Au
 D:\Programming\SAP\Audio Player\Audio Player\obj\x86\Debug\Audio Player.csprojResolveAssemblyReference.cache
 D:\Programming\SAP\Audio Player\Audio Player\bin\Debug\Audio Player.exe
 D:\Programming\SAP\Audio Player\Audio Player\bin\Debug\Audio Player.pdb
+D:\Programming\SAP\Audio Player\Audio Player\bin\Debug\Audio Player.exe.manifest
+D:\Programming\SAP\Audio Player\Audio Player\bin\Debug\Audio Player.application
+D:\Programming\SAP\Audio Player\Audio Player\obj\x86\Debug\Audio Player.TrustInfo.xml
+D:\Programming\SAP\Audio Player\Audio Player\obj\x86\Debug\Audio Player.exe.manifest
+D:\Programming\SAP\Audio Player\Audio Player\obj\x86\Debug\Audio Player.application
