@@ -501,6 +501,9 @@ namespace SAP
 
         static void Main(string[] args)
         {
+            //SETUP
+            firstSetup();
+
             //PROGRAM LOCK
             string authpath = @"playlists\reg.g";
 
@@ -532,9 +535,6 @@ namespace SAP
                     auth = true;
                 }
             }
-
-            //SETUP
-            firstSetup();
 
             //PROGRAM
             bool loop = true;
