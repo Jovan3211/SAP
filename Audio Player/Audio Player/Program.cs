@@ -2,6 +2,7 @@
 using WMPLib;
 using System.IO;
 using System.Threading;
+using System.Collections.Generic;
 using System.Collections;
 using Microsoft.Win32;
 
@@ -27,6 +28,7 @@ using Microsoft.Win32;
  * 1.3.1-5  - Minor changes.
  * 1.3.2    - Authentication and product key.
  * 1.3.2r1  - Project settings edited.
+ * 1.3.3r1  - You can now select a folder to input to playlist.
  *
  * PLANNED
  *
@@ -52,7 +54,7 @@ namespace SAP
     {
         static void printlogo()  //printing of the program logo text
         {
-            string version = "1.3.2r1";
+            string version = "1.3.3r1";
 
             Console.Clear();
             Console.WriteLine("{0}", version);
@@ -318,44 +320,90 @@ namespace SAP
             {
                 return;
             }
-            
+
             //creation of the text document where the song sources are stored
-            string playpath = @"playlists\" + playlistName + ".txt";  
+            string playpath = @"playlists\" + playlistName + ".txt";
 
             using (StreamWriter writer = new StreamWriter(playpath, true))
             {
-                bool loop = true;
-                while (loop == true) //inputing sources into the playlist text file
+                Console.WriteLine("Do you wish to select a playlist folder (y/n)?");
+                Console.Write("(if you input no, you will have to select individual songs)\n> ");
+                string prompt_playlistFolder = Console.ReadLine();
+
+                if (prompt_playlistFolder == "y")  //puts all music file paths from selected folder into a playlist.
                 {
-                    Console.WriteLine("Type in 'done' to finish.");
-                    Console.WriteLine("Write in the path of an audio file (C:\\user\\music\\jam.mp3) or drag and drop:");
-                    Console.Write("> ");
-                    string source = Console.ReadLine();
+                    List<string> list = new List<string>();
+                    string[] files = new string[10000];
+                    string source = "";
 
-                    //enables drag and drop
-                    if (source.Contains("\""))
+                    while (true)
                     {
-                        source = source.Replace("\"", "");
+                        printlogo();
+                        Console.WriteLine("Write in the path of a music directory: ");
+                        Console.Write("> ");
+                        source = Console.ReadLine();
+
+                        //check if directory exists
+                        if (Directory.Exists(source))
+                        {
+                            files = Directory.GetFiles(source, "*.*", SearchOption.AllDirectories);
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nThe selected path does not exists.");
+                            Console.ReadKey();
+                        }
                     }
 
-                    //check if good path and/or format
-                    if ((source.Contains(".mp3") || source.Contains(".wav")) && File.Exists(source))
+                    foreach (string path in files)
                     {
-                        writer.WriteLine(source);
+                        if (path.Contains(".wav") || path.Contains(".mp3"))
+                        {
+                            writer.WriteLine(path);
+                        }
+                    }
+                }
+                else if (prompt_playlistFolder == "n")
+                {
+                    bool loop = true;
+                    while (loop == true) //inputing sources into the playlist text file
+                    {
+                        Console.WriteLine("Type in 'done' to finish.");
+                        Console.WriteLine("Write in the path of an audio file (C:\\user\\music\\jam.mp3) or drag and drop:");
+                        Console.Write("> ");
+                        string source = Console.ReadLine();
 
-                        Console.WriteLine("The song has been added.\n");
+                        //enables drag and drop
+                        if (source.Contains("\""))
+                        {
+                            source = source.Replace("\"", "");
+                        }
+
+                        //check if good path and/or format
+                        if ((source.Contains(".mp3") || source.Contains(".wav")) && File.Exists(source))
+                        {
+                            writer.WriteLine(source);
+
+                            Console.WriteLine("The song has been added.\n");
+                        }
+                        else if (source == "done")
+                        {
+                            loop = false;
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nThe location is either incorrect or the file type is not supported.");
+                            Console.ReadKey();
+                            Console.WriteLine("");
+                        }
                     }
-                    else if (source == "done")
-                    {
-                        loop = false;
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nThe location is either incorrect or the file type is not supported.");
-                        Console.ReadKey();
-                        Console.WriteLine("");
-                    }
+                }
+                else
+                {
+                    Console.WriteLine("\nType in Y or N");
+                    return;
                 }
             }
 

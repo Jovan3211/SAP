@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Audio Player.exe" size="384936">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Audio Player.exe" size="385960">
       <assemblyIdentity name="Audio Player" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>tXmh7OkRk+3RbrFK4zr1Bansk9o=</dsig:DigestValue>
+        <dsig:DigestValue>DQjGsCdPNtbaSLcTsF885/KfqoA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
